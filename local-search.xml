@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Oracle 数据类型</title>
+    <link href="/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3/Oracle%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    <url>/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3/Oracle%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Number类型"><a href="#Number类型" class="headerlink" title="Number类型"></a>Number类型</h2><p>在Oracle中NUMBER数据类型用于存储数值类数据。其语法如下：</p><pre><code class="sql">NUMBER[(precision[,scale])]</code></pre><ul><li><p>precision表示精度，即这个数字有多少位，范围是1-38。</p></li><li><p>scale表示小数的位数也叫做尺度，范围是-84至127。</p><ul><li>当尺度为负数则表示该数的最小单位是10<sup>-scale</sup>。</li></ul></li><li><p>如果在<code>NUMBER(p，s)</code>列中<a href="http://www.oraok.com/oracle/oracle-insert.html">插入</a>数字，并且数字超过精度<code>p</code>，则Oracle将发出错误。 但是，如果数量超过尺度<code>s</code>，则Oracle将对该值进行四舍五入。</p></li><li><p>Oracle包含许多可用于定义数字列的别名，如下表所示：</p><table><thead><tr><th align="center">ANSI数据类型</th><th align="center">Oracle NUMBER数据类型</th></tr></thead><tbody><tr><td align="center">INT</td><td align="center">NUMBER(38)</td></tr><tr><td align="center">SMALLINT</td><td align="center">NUMBER(38)</td></tr><tr><td align="center">NUMBER(p,s)</td><td align="center">NUMBER(p,s)</td></tr><tr><td align="center">DECIMAL(p,s)</td><td align="center">NUMBER(p,s)</td></tr></tbody></table><p>ANSI所规定的数据类型在Oracle中都不是真正的数据类型，只是Oracle在内部映射的别名。</p></li></ul><h2 id="FLOAT数据类型"><a href="#FLOAT数据类型" class="headerlink" title="FLOAT数据类型"></a>FLOAT数据类型</h2><p>在Oracle中<code>FLOAT</code>数据类型是<code>NUMBER</code>的子类型， 其主要目的是促进与ANSI SQL FLOAT数据类型的兼容。</p><pre><code>FLOAT(p)</code></pre><p>FLOAT只能指定数据的精度。因为Oracle会从数据中去解析尺度。并且FLOAT指定的精度是二进制的，所以最大值为126，在number中的精度是10进制的。</p><h2 id="CHAR数据类型"><a href="#CHAR数据类型" class="headerlink" title="CHAR数据类型"></a>CHAR数据类型</h2><p>Oracle <code>CHAR</code>数据类型用于存储**<em>固定长度**</em>的字符串。 <code>CHAR</code>数据类型可以存储<code>1</code>到<code>2000</code>字节的字符串。</p><p>要定义一个<code>CHAR</code>列，需要用字节或字符来指定一个字符串长度，如下所示：</p><pre><code class="sql">CHAR(length BYTE)CHAR(length CHAR)</code></pre><p>固定长度意味着如果一个数据小于CHAR列所定义的长度的话，Oracle将用空格补全不足的长度。</p><h2 id="NCHAR数据类型"><a href="#NCHAR数据类型" class="headerlink" title="NCHAR数据类型"></a>NCHAR数据类型</h2><p>​        NCHAR用于存储固定长度的Unicode字符数据。<code>NCHAR</code>的字符集只能是<code>AL16UTF16</code>或<code>UTF8</code>，在数据库创建时指定为国家字符集。定义NCHAR时只能指定字符长度不能指定字节长度。</p><h2 id="VARCHAR2和NVARCHAR2数据类型"><a href="#VARCHAR2和NVARCHAR2数据类型" class="headerlink" title="VARCHAR2和NVARCHAR2数据类型"></a>VARCHAR2和NVARCHAR2数据类型</h2><p>​        和CHAR相比VARCHAR2不会在尾部填充空格补全不足长度，更省空间。</p><h2 id="DATE数据类型"><a href="#DATE数据类型" class="headerlink" title="DATE数据类型"></a>DATE数据类型</h2><p>​        DATE数据类型允许以一秒的精度存储包括日期和时间的时间点值。DATE数据类型存储年份(包括世纪)，月份，日期，小时数，分钟数和秒数。 它的范围从公元前4712年1月1日到公元9999年12月31日。输入和输出的标准日期格式是<code>DD-MON-YY</code>。</p><ul><li><p><code>TO_CHAR()</code>函数采用<code>DATE</code>值作为参数，根据指定的格式对其进行格式化，并返回一个日期字符串。</p><p>例如，要以特定的格式显示当前的系统日期，请按如下所示使用<code>TO_CHAR()</code>函数：</p><pre><code class="sql">SELECT  TO_CHAR( SYSDATE, &#39;MM/DD/YYYY&#39; )FROM  dual;</code></pre></li><li><p>由于Oracle使用内部格式来存储<code>DATE</code>数据，因此在将日期值存储到日期列之前，通常必须将字符串转换为日期值。<br>要转换不是标准格式的日期值，可以使用带有格式字符串的<code>TO_DATE()</code>函数。</p><p>以下示例使用<code>TO_DATE()</code>函数将字符串<code>“August 01，2017”</code>转换为相应的日期：</p><pre><code class="sql">-- alter session set nls_language=&#39;SIMPLIFIED CHINESE&#39;;SELECT  TO_DATE(&#39;2018-10-21&#39;, &#39;YYYY-MM-DD&#39; )FROM  dual;</code></pre></li></ul><h2 id="TIMESTAMP数据类型"><a href="#TIMESTAMP数据类型" class="headerlink" title="TIMESTAMP数据类型"></a>TIMESTAMP数据类型</h2><p><code>TIMESTAMP</code>数据类型用于存储日期和时间数据，包括年，月，日，时，分和秒。</p><p>另外，它存储小数秒，它不是由DATE数据类型存储的。</p><p>要定义<code>TIMESTAMP</code>列，请使用以下语法：</p><pre><code class="sql">column_name TIMESTAMP[(fractional_seconds_precision)]</code></pre><h2 id="INTERVAL数据类型"><a href="#INTERVAL数据类型" class="headerlink" title="INTERVAL数据类型"></a>INTERVAL数据类型</h2><p>Oracle提供了两种日期时间数据类型：<code>DATE</code>和<code>TIMESTAMP</code>用于存储时间点数据。另外，它提供<code>INTERVAL</code>数据类型用于存储一段时间。</p><p>有两种类型的<code>INTERVAL</code>：</p><ul><li><em>INTERVAL YEAR TO MONTH</em> - 间隔使用年份和月份。</li><li><em>INTERVAL DAY TO SECOND</em> - 使用包括小数秒在内的天，小时，分钟和秒存储间隔</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>数据库相关</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sql</tag>
+      
+      <tag>Oracle</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Oracle DDL语句学习</title>
     <link href="/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3/sqlDDL/"/>
     <url>/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3/sqlDDL/</url>
