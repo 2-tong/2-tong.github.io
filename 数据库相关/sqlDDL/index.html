@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/image/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="2tong">
+  <meta name="keywords" content="">
+  <title>Oracle DDL语句学习 - 二筒GKD</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>二筒GKD</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/image/bg.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 十一月 17日 2020, 10:12 上午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    901 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      3 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <h2 id="DDL语句，数据定义语句"><a href="#DDL语句，数据定义语句" class="headerlink" title="DDL语句，数据定义语句"></a>DDL语句，数据定义语句</h2><h3 id="创建表-CREATE-TABLE"><a href="#创建表-CREATE-TABLE" class="headerlink" title="创建表:CREATE TABLE"></a>创建表:CREATE TABLE</h3><p>​    CREATE TABLE的基本语法如下。</p>
+<pre><code class="sql">CREATE TABLE schema_name.table_name (
+    column_1 data_type column_constraint,
+    column_2 data_type column_constraint,
+    ...
+    table_constraint
+ );</code></pre>
+<p>​    示例</p>
+<pre><code class="sql">CREATE TABLE ot.persons(
+    person_id NUMBER GENERATED BY DEFAULT AS IDENTITY,
+    first_name VARCHAR2(50) NOT NULL,
+    last_name VARCHAR2(50) NOT NULL,
+    PRIMARY KEY(person_id)
+);</code></pre>
+<p>​    上面的语句就创建了如下表</p>
+<ul>
+<li><input disabled="" type="checkbox"> <table>
+<thead>
+<tr>
+<th align="center">列名</th>
+<th align="center">person_id</th>
+<th align="center">first_name</th>
+<th align="center">last_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">类型</td>
+<td align="center">NUMBER(自增，主键)</td>
+<td align="center">VARCHAR</td>
+<td align="center">VARCHAR</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="CREATE-TABEL-AS"><a href="#CREATE-TABEL-AS" class="headerlink" title="CREATE TABEL AS"></a>CREATE TABEL AS</h4><p>​    CREATE TABLE AS语句可以从现有的表格中复制列和对应的数据来创建新的表。</p>
+<ul>
+<li><p>基本语法 </p>
+<pre><code class="sql">CREATE TABLE new_table  
+AS (SELECT * FROM old_table);</code></pre>
+<ul>
+<li>其中的SELECT子句可使用复杂的查询，如多表查询。</li>
+<li>SELECT子句中所查询到的数据也会被复制到新表中的记录。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="删除表：DROP-TABLE"><a href="#删除表：DROP-TABLE" class="headerlink" title="删除表：DROP TABLE"></a>删除表：DROP TABLE</h3><pre><code class="sql">DROP TABLE persons</code></pre>
+<ul>
+<li><p>若要删除的表中主键被其他表的外键锁引用，则删除失败。此时应该使用</p>
+<pre><code class="sql">DROP TABLE persons CASCADE CONSTRAINTS;</code></pre>
+<p>此时在删除persons表的同时，还将删除其他表中关联了persons表的外键约束。</p>
+</li>
+<li><p>drop后的表会被放在回收站里，要彻底删除应该加上PURGE</p>
+<pre><code class="sql">DROP TABLE persons PURGE</code></pre>
+</li>
+</ul>
+<hr>
+<h3 id="ALTER-TABLE"><a href="#ALTER-TABLE" class="headerlink" title="ALTER TABLE"></a>ALTER TABLE</h3><h4 id="添加新的列到表中：ALTER-TABLE-ADD"><a href="#添加新的列到表中：ALTER-TABLE-ADD" class="headerlink" title="添加新的列到表中：ALTER TABLE ADD"></a>添加新的列到表中：ALTER TABLE ADD</h4><pre><code class="sql">//语法
+ALTER TABLE table_name
+ADD column_name type constraint;
+//添加多列
+ALTER TABLE table_name
+ADD (
+    column_name type constraint,
+    column_name type constraint,
+    ...
+);
+
+//例子
+ALTER TABLE persons 
+ADD birthdate DATE NOT NULL;</code></pre>
+<ul>
+<li><p>新添加的列只会被添加在表的末尾。</p>
+</li>
+<li><p>如果表中已存在同名列则会提示错误。</p>
+<ul>
+<li><p>要检查表中是否存在列，可以从<code>user_tab_cols</code>视图查询数据：</p>
+<pre><code class="sql">SELECT
+    COUNT(*)
+FROM
+    user_tab_cols
+WHERE
+    column_name = &#39;&#39;
+    AND table_name = &#39;&#39;;</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="修改列属性：ALTER-TABLE-MODIFY"><a href="#修改列属性：ALTER-TABLE-MODIFY" class="headerlink" title="修改列属性：ALTER TABLE MODIFY"></a>修改列属性：ALTER TABLE MODIFY</h4><pre><code class="sql">//语法
+ALTER TABLE table_name MODIFY column_name type constraint;
+//多列
+ALTER TABLE table_name
+ MODIFY ( column_1 type constraint,
+          column_1 type constraint,
+         ...);
+
+//例子
+ALTER TABLE persons MODIFY birthdate DATE NULL;</code></pre>
+<ul>
+<li><p>在oracle 12c中，可将列定义为可见或者不可见。不可见不能用于查询。</p>
+<pre><code class="SQL">ALTER TABLE table_name MODIFY col_name [VISIBLE/INVISIBLE]</code></pre>
+<ul>
+<li>INVISIBLE和UNUSED的区别在于:INVISIBLE只能限制查询语句，一个列被设为invisible过后仍然可以在插入（修改）语句中使用。而被设为unused的列若在插入（修改）语句中被使用就会报错。**<em>所以说这里的不可见是指查询不可见。**</em></li>
+</ul>
+<hr>
+</li>
+</ul>
+<h4 id="删除列：ALTER-TABLE-DROP"><a href="#删除列：ALTER-TABLE-DROP" class="headerlink" title="删除列：ALTER TABLE DROP"></a>删除列：ALTER TABLE DROP</h4><pre><code class="sql">ALTER TABLE table_name
+DROP COLUMN column_name;
+
+ALTER TABLE persons
+DROP
+  COLUMN birthdate;</code></pre>
+<ul>
+<li><p>在大表中删除列可能耗费大量的时间和资源。通常先使用SET UNUSED 语句来逻辑删除列（可理解为隐藏）,然后在非高峰期用DROP UNUSED COLUMNS物理上删除所以被隐藏的列。</p>
+<pre><code class="sql">ALTER TABLE table_name 
+SET UNUSED COLUMN column_name;
+
+ALTER TABLE table_name
+DROP UNUSED COLUMNS;</code></pre>
+</li>
+<li><p>在DBA_UNUSED_COL_TABS视图中可以查看每张表被UNUSED方法删除的列数。</p>
+<pre><code class="SQL">SELECT * FROM DBA_UNUSED_COL_TABS</code></pre>
+<hr>
+</li>
+</ul>
+<h4 id="重命名列或表：ALTER-TABLE-RENAME"><a href="#重命名列或表：ALTER-TABLE-RENAME" class="headerlink" title="重命名列或表：ALTER TABLE RENAME"></a>重命名列或表：ALTER TABLE RENAME</h4><pre><code class="sql">//重命名列名
+ALTER TABLE table_name
+RENAME COLUMN column_name TO new_name;
+
+//重命名表名
+ALTER TABLE table_name
+RENAME TO new_table_name;</code></pre>
+<ul>
+<li>当重命名表时，Oracle自动将旧表上的索引，约束和授权转移到新表上。 另外，它使依赖重命名表(原表)的所有对象失效，如视图，存储过程，函数和同义词。</li>
+</ul>
+<hr>
+<h3 id="截断表"><a href="#截断表" class="headerlink" title="截断表"></a>截断表</h3><p>​    对于有少量行记录的表，<code>DELETE</code>语句做得很好。 但是，当拥有大量行记录的表时，使用<code>DELETE</code>语句删除所有数据效率并不高。</p>
+<p>​    这时，可以使用TRUNCATE TABLE删除表中的所有数据并*<u>保留表结构(Drop会直接删除整张表，包括表结构)</u>*</p>
+<pre><code class="sql">TRUNCATE TABLE table_name;</code></pre>
+<p>*<strong>注意</strong>：TRUNCATE在功能上看上去和DELETE一样，但它却需要DROP权限，这意味着：</p>
+<ul>
+<li>TRUNCATE是DDL语句，无法回滚！</li>
+<li>TRUNCATE不会激活与表有关的删除触发器。</li>
+<li>TRUNCATE会重置表的自增值。</li>
+</ul>
+<p>所以在TRUNCATE之前一定要再三检查，最好备份过后再操作。</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3/">数据库相关</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/sql/">sql</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Oracle/">Oracle</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="lv-container" data-id="city" data-uid="MTAyMC80OTEzNy8yNTYzMQ==">
+    <script type="text/javascript">
+      (function (d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+
+        if (typeof LivereTower === 'function') {
+          return;
+        }
+
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.defer = true;
+
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  </div>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-md">
+    <div class="container custom post-content mx-auto">
+      <div class="text-center"><a target="_blank" rel="noopener" href="https://t.me/z_2tong"><img src="/image/t_logo.png" srcset="/img/loading.gif"  style="width:50px; height:50px;"></a> <a target="_blank" rel="noopener" href="https://github.com/2-tong"><img src="/image/github_logo.png" srcset="/img/loading.gif" style="width:50px; height:50px;white-space:nowrap"></a></div>
+    </div>
+  </div>
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <b>Powered  by</b>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-160754049-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Oracle DDL语句学习&nbsp;",
+      ],
+      cursorChar: "|",
+      typeSpeed: 40,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
